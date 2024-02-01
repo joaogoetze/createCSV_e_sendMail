@@ -47,7 +47,7 @@ Class Order
         $this->quantity = $value;
     }
 
-    public function __construct($order_id = "", $product_id = "", $date = "", $quantity = "")
+    public function __construct($order_id, $product_id, $date, $quantity)
     {
         $this->order_id = $order_id;
         $this->product_id = $product_id;
@@ -89,6 +89,11 @@ Class Order
         }
         fclose($file);
         return $ordersArray;
+    }
+
+    function getOrderByProduct()
+    {
+
     }
 }
 

@@ -2,10 +2,13 @@
 
 Class Product
 {
+    //Atributos
     public $product_id;
     public $name;
+    /** @var float */
     public $price;
 
+    //Getters e Setters
     public function getProduct_id()
     {
         return $this->product_id;
@@ -36,13 +39,15 @@ Class Product
         $this->price = $value;
     }
 
-    public function __construct($product_id = "", $name = "", $price = "")
+    //Método construtor
+    public function __construct($product_id, $name, $price)
     {
         $this->product_id = $product_id;
         $this->name = $name;
         $this->price = $price;
     }
 
+    //Método para printar usuário
     public function __toString()
     {
         return json_encode(array(
@@ -52,6 +57,7 @@ Class Product
         ));
     }
     
+    //Método que lê os produtos que estão do csv
     function readProductsCSV()
     {
     
@@ -62,7 +68,7 @@ Class Product
 
         while(! feof($file))
         { 
-            $product = new Product();
+            $product = new Product("","","");
             $data = fgetcsv($file);
 
             if ($lineCount == 0) 
@@ -83,23 +89,23 @@ Class Product
         fclose($file);
     }
 
-    public function getProductById($product_id)
+    //Método que pega o produto por ID                    
+    public function getProductById($productsArray, $product_id) //Em qual array quero pro curar //Qual item quero procurar
     {
-        $product = new Product();
-        $array = $product->readProductsCSV();
-        //print_r($array);
-        foreach($array as $item)
+        $product = new Product("","","");
+        foreach($productsArray as $teste)
         {
-            //echo $item ."<br>";
-            
-        
-            if($item->product_id == $product_id)
-            {
-                echo $item->price . "<br>";
+            if($teste->product_id == $product_id)
+            {   
+                $product->setProduct_id($teste->product_id);
+                $product->setName($teste->name);
+                $product->setPrice($teste->price);
+                
+                return $product;
             }
-            
         }
-    }
+        return null;
+    }  
 }
 
 
