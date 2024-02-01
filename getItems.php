@@ -2,6 +2,7 @@
 
 include 'Classes/Order.php';
 include 'Classes/Product.php';
+include 'createCSV.php';
 
 $product = new Product("","","");
 $order = new Order("","","","");
@@ -62,7 +63,9 @@ foreach ($ordersArray as $order)
     }
 }
 
-$finalArray = array();
+$finalArray = array(
+    ['product_id','preco','date','quantity','valor_total']
+);
 foreach($last_sales as $sales)
 {
     $vendas_total = ($sales['quantity'])*($sales['valor']);
@@ -77,6 +80,27 @@ foreach($last_sales as $sales)
     
 }
 
-print_r($finalArray);
+//print_r($finalArray);
 
+new createCSV($finalArray);
+
+$para = "joaoaugustoferreira5@gmail.com";
+$assunto = "Assunto do e-mail";
+$mensagem = "Este é o corpo do e-mail.";
+
+// Para enviar HTML mail, o cabeçalho Content-type deve ser definido
+$cabecalhos  = "MIME-Version: 1.0" . "\r\n";
+$cabecalhos .= "Content-type: text/html; charset=UTF-8" . "\r\n";
+
+// Cabeçalhos adicionais
+$cabecalhos .= "From: remetente@example.com" . "\r\n";
+$cabecalhos .= "Cc: copia@example.com" . "\r\n";
+$cabecalhos .= "Bcc: copia_oculta@example.com" . "\r\n";
+
+// Envie o e-mail
+if(mail($para, $assunto, $mensagem, $cabecalhos)) {
+    echo "E-mail enviado com sucesso!";
+} else {
+    echo "Falha ao enviar o e-mail.";
+}
 ?>
