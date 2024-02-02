@@ -67,9 +67,32 @@ class Funcionario
         $this->salario = $salario;
     }
 
-    public function insertUsuario()
+    public function insertFuncionario($conn, $nome, $genero, $idade, $salario)
     {
-        
+        $sql = "INSERT INTO funcionarios (nome, genero, idade, salario) VALUES ('$nome', '$genero', '$idade', '$salario')";
+        $stmt = $conn->prepare($sql);
+        if($stmt->execute())
+        {
+            return "Usuário inserido com sucesso!";
+        }
+        else
+        {
+            return "Erro durante a inserção: "; 
+        }
+    }
+
+    public function getFuncionario($conn, $id)
+    {
+        $sql = "SELECT * FROM funcionarios WHERE id = '$id'";
+        $stmt = $conn->prepare($sql);
+        if($stmt->execute())
+        {
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
+        else
+        {
+            return "Erro durante a inserção: "; 
+        }
     }
 }
 
