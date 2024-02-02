@@ -90,11 +90,6 @@ Class Order
         fclose($file);
         return $ordersArray;
     }
-
-    function getOrderByProduct()
-    {
-
-    }
 }
 
 ?>
