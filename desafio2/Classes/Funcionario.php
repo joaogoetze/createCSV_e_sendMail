@@ -94,6 +94,36 @@ class Funcionario
             return "Erro durante a inserção: "; 
         }
     }
+
+    public function updateFuncionario($conn, $id, $nome, $genero, $idade, $salario)
+    {
+        $sql = "UPDATE funcionarios SET nome = '$nome', genero = '$genero', 
+        idade = '$idade', salario = '$salario'
+        WHERE id = '$id'";
+        $stmt = $conn->prepare($sql);
+        if($stmt->execute())
+        {
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
+        else
+        {
+            return "Erro durante alteração"; 
+        }    
+    }
+
+    public function deleteFuncionario($conn, $id)
+    {
+        $sql = "DELETE FROM funcionarios WHERE id = '$id'";
+        $stmt = $conn->prepare($sql);
+        if($stmt->execute())
+        {
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
+        else
+        {
+            return "Erro durante alteração"; 
+        } 
+    }
 }
 
 ?>
