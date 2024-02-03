@@ -124,6 +124,46 @@ class Funcionario
             return "Erro durante alteração"; 
         } 
     }
+    
+    public function getTodosFuncionarios($conn)
+    {
+        $sql = "SELECT * FROM funcionarios";
+        $stmt = $conn->prepare($sql);
+        if($stmt->execute())
+        {
+            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+        }
+        else
+        {
+            return "Erro durante consulta";
+        }
+    }
+
+    public function setSalarioFuncionario($conn, $id, $percentualAumento)
+    {
+        $funcionario = new Funcionario("","","","","");
+        $funcionario = $funcionario->getFuncionario($conn, $id);
+        $sql = "SELECT * FROM funcionarios WHERE id = '$id'";
+        $stmt = $conn->prepare($sql);
+        if($stmt->execute())
+        {
+            $arrayFun = $stmt->fetchAll(PDO::FETCH_ASSOC);
+            
+            $func = new Funcionario($arrayFun[0]['id'], $arrayFun[0]['nome'], $arrayFun[0]['genero'], $arrayFun[0]['idade'], $arrayFun[0]['salario']);
+            
+            $salario = $func->getSalario();
+            
+            
+            $func->setSalario($salario + (($salario/100) * $percentualAumento));
+            echo "Novo salário: " . $func->getSalario();
+            $func->updateFuncionario($conn, $func->getId(), $func->getNome(), $func->getGenero(), $func->getIdade(), $func->getSalario());
+        }
+        else
+        {
+            echo "Erro durante a busca: "; 
+        }
+        
+    }
 }
 
 ?>
