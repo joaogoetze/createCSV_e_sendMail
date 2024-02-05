@@ -67,9 +67,20 @@ class Funcionario
         $this->salario = $salario;
     }
 
-    public function insertFuncionario($conn, $nome, $genero, $idade, $salario)
+    public function __toString()
     {
-        $sql = "INSERT INTO funcionarios (nome, genero, idade, salario) VALUES ('$nome', '$genero', '$idade', '$salario')";
+        return json_encode(array(
+            "id"=>$this->id,
+            "nome"=>$this->nome,
+            "genero"=>$this->genero,
+            "idade"=>$this->idade,
+            "salario"=>$this->salario
+        ));
+    }
+
+    public function insertFuncionario($conn, $funcionario)
+    {
+        $sql = "INSERT INTO funcionarios (nome, genero, idade, salario) VALUES ('$funcionario->getNome()', '$funcionario->getGenero()', '$funcionario->getIdade()', '$funcionario->getSalario()')";
         $stmt = $conn->prepare($sql);
         if($stmt->execute())
         {
