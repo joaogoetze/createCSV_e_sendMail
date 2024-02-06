@@ -11,7 +11,7 @@ try
     $conn = new PDO("pgsql:host=$host;port=$port;dbname=$dbname", $user, $password);
     // Configura para lançar exceções em caso de erros
     $conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    echo "Conexão bem-sucedida";
+    echo "Conexão bem-sucedida <br><br>";
 } 
 catch (PDOException $e)
 {

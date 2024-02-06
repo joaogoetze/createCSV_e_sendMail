@@ -80,64 +80,95 @@ class Funcionario
 
     public function insertFuncionario($conn, $funcionario)
     {
-        $sql = "INSERT INTO funcionarios (nome, genero, idade, salario) VALUES ('" . $funcionario->getNome() . "', '" . $funcionario->getGenero() . "', '" . $funcionario->getIdade() . "', '" . $funcionario->getSalario() . "')";
-        $stmt = $conn->prepare($sql);
-        if($stmt->execute())
+        try
         {
-            return "Usuário inserido com sucesso!";
+            $sql = "INSERT INTO funcionarios (nome, genero, idade, salario) VALUES ('" . $funcionario->getNome() . "', '"
+            . $funcionario->getGenero() . "', '" . $funcionario->getIdade() . "', '" . $funcionario->getSalario() . "')";
+            $stmt = $conn->prepare($sql);
+            if($stmt->execute())
+            {
+                return "Usuário inserido com sucesso!";
+            }
+            else
+            {
+                return "Erro durante a inserção: "; 
+            }
         }
-        else
+        catch(PDOException $erro)
         {
-            return "Erro durante a inserção: "; 
+            echo "Erro de SQL: " . $erro->getMessage();
         }
     }
 
     public function getFuncionario($conn, $id)
     {
-        $sql = "SELECT * FROM funcionarios WHERE id = '$id'";
-        $stmt = $conn->prepare($sql);
-        if($stmt->execute())
+        try
         {
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $sql = "SELECT * FROM funcionarios WHERE id = '$id'";
+            $stmt = $conn->prepare($sql);
+            if($stmt->execute())
+            {
+                return "Usuário inserido com sucesso!";
+            }
+            else
+            {
+                return "Erro durante a inserção: "; 
+            }
         }
-        else
+        catch(PDOException $erro)
         {
-            return "Erro durante a inserção: "; 
+            echo "Erro de SQL: " . $erro->getMessage();
         }
     }
 
     public function updateFuncionario($conn, $id, $nome, $genero, $idade, $salario)
     {
-        $sql = "UPDATE funcionarios SET nome = '$nome', genero = '$genero', 
-        idade = '$idade', salario = '$salario'
-        WHERE id = '$id'";
-        $stmt = $conn->prepare($sql);
-        if($stmt->execute())
+        try
         {
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $sql = "UPDATE funcionarios SET nome = '$nome', genero = '$genero', 
+            idade = '$idade', salario = '$salario'
+            WHERE id = '$id'";
+            $stmt = $conn->prepare($sql);
+            if($stmt->execute())
+            {
+                return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            }
+            else
+            {
+                return "Erro durante alteração"; 
+            }    
         }
-        else
+        catch(PDOException $erro)
         {
-            return "Erro durante alteração"; 
-        }    
+            echo "Erro de SQL: " . $erro->getMessage();
+        }
+        
     }
 
     public function deleteFuncionario($conn, $id)
     {
-        $sql = "DELETE FROM funcionarios WHERE id = '$id'";
-        $stmt = $conn->prepare($sql);
-        if($stmt->execute())
+        try
         {
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            $sql = "DELETE FROM funcionarios WHERE id = '$id'";
+            $stmt = $conn->prepare($sql);
+            if($stmt->execute())
+            {
+                return $stmt->fetchAll(PDO::FETCH_ASSOC);
+            }
+            else
+            {
+                return "Erro para deletar"; 
+            }    
         }
-        else
+        catch(PDOException $erro)
         {
-            return "Erro durante alteração"; 
-        } 
+            echo "Erro de SQL: " . $erro->getMessage();
+        }
     }
     
     public function getTodosFuncionarios($conn)
     {
+        
         $sql = "SELECT * FROM funcionarios";
         $stmt = $conn->prepare($sql);
         if($stmt->execute())
