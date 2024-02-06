@@ -80,7 +80,7 @@ class Funcionario
 
     public function insertFuncionario($conn, $funcionario)
     {
-        $sql = "INSERT INTO funcionarios (nome, genero, idade, salario) VALUES ('$funcionario->getNome()', '$funcionario->getGenero()', '$funcionario->getIdade()', '$funcionario->getSalario()')";
+        $sql = "INSERT INTO funcionarios (nome, genero, idade, salario) VALUES ('" . $funcionario->getNome() . "', '" . $funcionario->getGenero() . "', '" . $funcionario->getIdade() . "', '" . $funcionario->getSalario() . "')";
         $stmt = $conn->prepare($sql);
         if($stmt->execute())
         {
