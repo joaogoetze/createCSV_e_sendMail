@@ -206,6 +206,17 @@ class Funcionario
         }
         
     }
+
+    public function getObjectFuncionarioFromArray($arrayFuncionarios)
+    {
+        $arayObjectFuncionarios = array();
+        foreach($arrayFuncionarios as $funcionario)
+        {
+            $func = new Funcionario($funcionario['id'], $funcionario['nome'], $funcionario['genero'], $funcionario['idade'],$funcionario['salario']);
+            array_push($arayObjectFuncionarios, $funcionario);
+        }
+        return $arayObjectFuncionarios;
+    }
 }
 
 ?>
