@@ -85,8 +85,9 @@ Class Product
             }
         }
         //print_r($productsArray);
-        return $productsArray;
         fclose($file);
+        return $productsArray;
+        
     }
 
     //Método que pega o produto por ID                    
