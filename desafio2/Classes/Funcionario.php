@@ -85,18 +85,12 @@ class Funcionario
             $sql = "INSERT INTO funcionarios (nome, genero, idade, salario) VALUES ('" . $funcionario->getNome() . "', '"
             . $funcionario->getGenero() . "', '" . $funcionario->getIdade() . "', '" . $funcionario->getSalario() . "')";
             $stmt = $conn->prepare($sql);
-            if($stmt->execute())
-            {
-                return "Usuário inserido com sucesso!";
-            }
-            else
-            {
-                return "Erro durante a inserção: "; 
-            }
+            $retorno = $stmt->execute();
+            return "Usuário inserido com sucesso!";
         }
         catch(PDOException $erro)
         {
-            echo "Erro de SQL: " . $erro->getMessage();
+            echo "Erro ao inserir usuário: " . $erro->getMessage();
         }
     }
 
@@ -106,19 +100,14 @@ class Funcionario
         {
             $sql = "SELECT * FROM funcionarios WHERE id = '$id'";
             $stmt = $conn->prepare($sql);
-            if($stmt->execute())
-            {
-                return "Usuário inserido com sucesso!";
-            }
-            else
-            {
-                return "Erro durante a inserção: "; 
-            }
+            $stmt->execute();
+            $retorno = $stmt->fetch(PDO::FETCH_ASSOC);
+            return $retorno;
         }
         catch(PDOException $erro)
         {
-            echo "Erro de SQL: " . $erro->getMessage();
-        }
+            echo "Erro ao buscar usuário: " . $erro->getMessage();
+        } 
     }
 
     public function updateFuncionario($conn, $id, $nome, $genero, $idade, $salario)
@@ -129,20 +118,13 @@ class Funcionario
             idade = '$idade', salario = '$salario'
             WHERE id = '$id'";
             $stmt = $conn->prepare($sql);
-            if($stmt->execute())
-            {
-                return $stmt->fetchAll(PDO::FETCH_ASSOC);
-            }
-            else
-            {
-                return "Erro durante alteração"; 
-            }    
+            $stmt->execute();
+            return "Funcionário atualizado com sucesso";  
         }
         catch(PDOException $erro)
         {
-            echo "Erro de SQL: " . $erro->getMessage();
-        }
-        
+            echo "Erro ao alterar usuário: " . $erro->getMessage();
+        }   
     }
 
     public function deleteFuncionario($conn, $id)
@@ -151,71 +133,28 @@ class Funcionario
         {
             $sql = "DELETE FROM funcionarios WHERE id = '$id'";
             $stmt = $conn->prepare($sql);
-            if($stmt->execute())
-            {
-                return $stmt->fetchAll(PDO::FETCH_ASSOC);
-            }
-            else
-            {
-                return "Erro para deletar"; 
-            }    
+            $stmt->execute();
+            return "Usuário deletado com sucesso";  
         }
         catch(PDOException $erro)
         {
-            echo "Erro de SQL: " . $erro->getMessage();
+            echo "Erro ao deletar usuário: " . $erro->getMessage();
         }
     }
     
     public function getTodosFuncionarios($conn)
     {
-        
-        $sql = "SELECT * FROM funcionarios";
-        $stmt = $conn->prepare($sql);
-        if($stmt->execute())
+        try
         {
+            $sql = "SELECT * FROM funcionarios";
+            $stmt = $conn->prepare($sql);
+            $stmt->execute();
             return $stmt->fetchAll(PDO::FETCH_ASSOC);
         }
-        else
+        catch(PDOException $erro)
         {
-            return "Erro durante consulta";
+            echo "Erro ao buscar usuários";
         }
-    }
-
-    public function setSalarioFuncionario($conn, $id, $percentualAumento)
-    {
-        $funcionario = new Funcionario("","","","","");
-        $funcionario = $funcionario->getFuncionario($conn, $id);
-        $sql = "SELECT * FROM funcionarios WHERE id = '$id'";
-        $stmt = $conn->prepare($sql);
-        if($stmt->execute())
-        {
-            $arrayFun = $stmt->fetchAll(PDO::FETCH_ASSOC);
-            
-            $func = new Funcionario($arrayFun[0]['id'], $arrayFun[0]['nome'], $arrayFun[0]['genero'], $arrayFun[0]['idade'], $arrayFun[0]['salario']);
-            
-            $salario = $func->getSalario();
-            
-            
-            $func->setSalario($salario + (($salario/100) * $percentualAumento));
-            echo "Novo salário: " . $func->getSalario();
-            $func->updateFuncionario($conn, $func->getId(), $func->getNome(), $func->getGenero(), $func->getIdade(), $func->getSalario());
-        }
-        else
-        {
-            echo "Erro durante a busca: "; 
-        }
-        
-    }
-
-    public function getObjectFuncionarioFromArray($arrayFuncionarios)
-    {
-        $arayObjectFuncionarios = array();
-        foreach($arrayFuncionarios as $funcionario)
-        {
-            $func = new Funcionario($funcionario['id'], $funcionario['nome'], $funcionario['genero'], $funcionario['idade'],$funcionario['salario']);
-            array_push($arayObjectFuncionarios, $funcionario);
-        }
-        return $arayObjectFuncionarios;
     }
 }
 

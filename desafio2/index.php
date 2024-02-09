@@ -10,41 +10,42 @@ $arrayPessoas = (array(
     array("nome"=>"Giovanna", "genero"=>"Feminino", "idade"=>21, "salario"=>3000),
 ));
 
-//print_r($arrayPessoas);
-
-
-/*
+//Realizando 4 cadastros
 foreach ($arrayPessoas as $pessoa)
 {
     $funcionario = new Funcionario("", $pessoa["nome"], $pessoa["genero"], $pessoa["idade"], $pessoa["salario"]);    
-    $funcionario->insertFuncionario($conn, $funcionario);
+    echo $funcionario->insertFuncionario($conn, $funcionario);
 }
-*/
-$funcionario = new Funcionario("","","","","");
 
+//Aleterar nomes e salários
+$funcionario = new Funcionario("","","","","");
 $todosFuncionarios = $funcionario->getTodosFuncionarios($conn);
 $percentualAumento = 10;
+
 foreach($todosFuncionarios as $func)
 {
-    $fun = new Funcionario($func['id'], $func['nome'], 
+    $funcionario = new Funcionario($func['id'], $func['nome'], 
     $func['genero'], $func['idade'], $func['salario']);
-    $fun->updateFuncionario($conn, $fun->getId(), "Juão", "Home", 40, ($fun->getSalario() + (($fun->getSalario()/100) * $percentualAumento)));
+    echo $funcionario->updateFuncionario($conn, $funcionario->getId(), "Outro nome", "Home", 40, 
+    ($funcionario->getSalario() + (($funcionario->getSalario()/100) * $percentualAumento)));
     $percentualAumento += 10;
 }
+
+//Listar todos funcionários
+$todosFuncionarios = $funcionario->getTodosFuncionarios($conn);
 print_r($todosFuncionarios);
 
+// Pegar o id de um funcionario, dar unset no objeto e instanciar esse mesmo funcionário novamente
+$funcionario = new Funcionario($todosFuncionarios[0]['id'],$todosFuncionarios[0]['nome'],$todosFuncionarios[0]['genero'],$todosFuncionarios[0]['idade'],$todosFuncionarios[0]['salario']);
+$idFuncionario = $funcionario->getId();
+unset($funcionario);
+$funcionario = new Funcionario("","","","","");
+$funcionarioArray = $funcionario->getFuncionario($conn, $idFuncionario);
+$funcionario = new Funcionario($funcionarioArray['id'], $funcionarioArray['nome'], 
+$funcionarioArray['genero'], $funcionarioArray['idade'], $funcionarioArray['salario']);
+echo $funcionario;
 
-//$retorno = $funcionario->insertFuncionario($conn, "Giovanna", "Feminino", 21, 3000);
+//Excluindo funcionário
+echo $funcionario->deleteFuncionario($conn, $funcionario->getId());
 
-//$retorno = $funcionario->getFuncionario($conn, 1);
-
-//$retorno = $funcionario->updateFuncionario($conn, 1, "Juão", "Home", 40, 10000);
-
-//$retorno = $funcionario->deleteFuncionario($conn, 1);
-
-//$retorno = $funcionario->getTodosFuncionarios($conn);
-
-//$funcionario->setSalarioFuncionario($conn, 2, 10);
-
-//print_r($retorno);
 ?>
